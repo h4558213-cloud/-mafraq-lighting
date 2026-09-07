@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>بلاغات إنارة الشوارع | بلدية المفرق الكبرى</title>
+<style>
+body{margin:0;font-family:Tahoma,Arial;background:#f4f7f6;color:#17202a}.top{background:#176b4d;color:white;text-align:center;padding:28px 15px}.top h1{margin:0 0 8px}.box{max-width:680px;margin:22px auto;background:white;padding:22px;border-radius:18px;box-shadow:0 5px 20px #0001}label{display:block;font-weight:bold;margin:15px 0 7px}input,select,textarea{width:100%;padding:13px;border:1px solid #ccd4d1;border-radius:10px;font-size:16px;box-sizing:border-box}textarea{min-height:110px}.row{display:flex;gap:8px}.row input{flex:1}.btn{border:0;border-radius:10px;padding:13px 17px;background:#176b4d;color:#fff;font-weight:bold;font-size:16px}.send{width:100%;margin-top:20px}.msg{display:none;margin-top:15px;padding:15px;background:#edf8f2;border-radius:10px}.small{font-size:13px;color:#667085}footer{text-align:center;padding:20px;color:#667085}
+</style></head>
+<body>
+<div class="top"><h1>بلدية المفرق الكبرى</h1><div>بلاغ صيانة إنارة الشوارع</div></div>
+<div class="box">
+<h2>تقديم بلاغ جديد</h2>
+<div class="small">الحقول المعلّمة * إلزامية، ولا حاجة لرقم عمود الإنارة.</div>
+
+<label>رقم الهاتف *</label>
+<input id="phone" type="tel" inputmode="numeric" maxlength="10" placeholder="07xxxxxxxx">
+
+<label>المنطقة / الحي *</label>
+<input id="area" placeholder="مثال: حي الحسين">
+
+<label>نوع العطل *</label>
+<select id="problem"><option value="">اختر نوع العطل</option><option>وحدة إنارة لا تعمل</option><option>الإنارة تومض</option><option>ضعف الإنارة</option><option>عمود إنارة متضرر</option><option>أسلاك مكشوفة</option><option>أخرى</option></select>
+
+<label>موقع العطل *</label>
+<div class="row"><input id="location" readonly placeholder="اضغط تحديد الموقع"><button class="btn" onclick="locate()">📍 تحديد</button></div>
+<div id="gps" class="small"></div>
+
+<label>صورة العطل *</label>
+<input id="photo" type="file" accept="image/*" capture="environment">
+
+<label>وصف المشكلة *</label>
+<textarea id="desc" placeholder="اكتب وصفًا واضحًا لمكان ومشكلة الإنارة"></textarea>
+
+<button class="btn send" onclick="submitReport()">إرسال البلاغ</button>
+<div id="msg" class="msg"></div>
+</div>
+<footer>نظام إلكتروني مقترح لبلاغات صيانة إنارة الشوارع</footer>
+<script>
+let lat=null,lon=null;
+function locate(){if(!navigator.geolocation){gps.textContent='المتصفح لا يدعم تحديد الموقع';return}gps.textContent='جارٍ تحديد الموقع...';navigator.geolocation.getCurrentPosition(p=>{lat=p.coords.latitude;lon=p.coords.longitude;location.value=lat.toFixed(6)+', '+lon.toFixed(6);gps.textContent='تم تحديد الموقع بنجاح';},()=>gps.textContent='تعذر تحديد الموقع؛ اسمح للموقع من إعدادات الهاتف',{enableHighAccuracy:true,timeout:10000});}
+function submitReport(){
+ let phone=document.getElementById('phone').value.trim(),area=document.getElementById('area').value.trim(),problem=document.getElementById('problem').value,desc=document.getElementById('desc').value.trim(),photo=document.getElementById('photo').files.length;
+ if(!/^07\d{8}$/.test(phone)||!area||!problem||lat===null||!photo||!desc){msg.style.display='block';msg.textContent='يرجى تعبئة جميع الحقول المطلوبة، وإرفاق صورة وتحديد الموقع ورقم هاتف أردني صحيح.';return}
+ let id='MFQ-'+Date.now().toString().slice(-8);msg.style.display='block';msg.innerHTML='تم إنشاء البلاغ بنجاح (نسخة تجريبية).<br><b>رقم البلاغ: '+id+'</b><br><span class="small">عند ربط قاعدة البيانات سيُحفظ البلاغ ويظهر للموظف المختص.</span>';
+}
+</script></body></html>
